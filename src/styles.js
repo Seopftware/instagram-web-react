@@ -13,6 +13,14 @@ export const darkTheme = {
   bgColor: "#000",
 };
 
+/* 
+- GlobalStyles를 사용해서 전체 스타일을 적용시킨다. ex) body, input, a tag
+- box-sizing:border-box; // box의 크기에 집중(=>컨텐츠 크기의 영향을 받지 않음. 사이즈 예측이 가능)
+
+참고링크:
+https://www.npmjs.com/package/styled-components
+https://www.npmjs.com/package/styled-reset
+*/
 export const GlobalStyles = createGlobalStyle`
     ${reset}
     input {

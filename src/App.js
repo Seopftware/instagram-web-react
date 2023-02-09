@@ -1,7 +1,8 @@
-import { HashRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./screens/Home";
 import Profile from "./screens/Profile";
 import Login from "./screens/Login";
+import SignUp from "./screens/SignUp";
 
 import { useReactiveVar } from "@apollo/client";
 import { darkModeVar, isLoggedInVar } from "./apollo";
@@ -17,16 +18,8 @@ function App() {
       <GlobalStyles />
       <Router>
         <Routes>
-          {isLoggedIn ? (
-            <>
-              <Route path="/" element={<Home />} />
-              <Route path="/profile" element={<Profile />} />
-            </>
-          ) : (
-            <>
-              <Route path="/" element={<Login />} />
-            </>
-          )}
+          <Route path="/" element={isLoggedIn ? <Home /> : <Login />} />
+          {!isLoggedIn ? <Route path="/signup" element={<SignUp />} /> : null}
         </Routes>
       </Router>
     </ThemeProvider>
