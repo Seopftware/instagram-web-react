@@ -1,4 +1,3 @@
-import { isLoggedInVar } from "../apollo";
 import { useState } from "react";
 import styled, { css } from "styled-components";
 import { darkModeVar } from "../apollo";
@@ -16,6 +15,7 @@ import FormBox from "../components/auth/FormBox";
 import Input from "../components/auth/Input";
 import Seperator from "../components/auth/Seperator";
 import routes from "../routes";
+import { isLoggedInVar } from "../apollo";
 
 const FacebookLogin = styled.div`
   color: #385285;
@@ -25,6 +25,11 @@ const FacebookLogin = styled.div`
   }
 `;
 
+const onSubmit = (event) => {
+  event.preventDefault();
+  isLoggedInVar(true);
+};
+
 function Login() {
   return (
     <AuthLayout>
@@ -32,7 +37,7 @@ function Login() {
         <div>
           <FontAwesomeIcon icon={faInstagram} size="3x" />
         </div>
-        <form>
+        <form onSubmit={onSubmit}>
           <Input type="text" placeholder="Username" />
           <Input type="password" placeholder="Password" />
           <Button type="submit" value="Log in" />
