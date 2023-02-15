@@ -19,7 +19,7 @@ const SHeader = styled.header`
 `;
 
 const Wrapper = styled.div`
-  max-width: 930px;
+  max-width: 500px;
   width: 100%;
   display: flex;
   justify-content: space-between;

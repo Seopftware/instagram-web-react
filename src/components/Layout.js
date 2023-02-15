@@ -4,7 +4,7 @@ import Header from "./Header";
 const Content = styled.main`
   margin: 0 auto;
   margin-top: 45px;
-  max-width: 930px;
+  max-width: 500px;
   width: 100%;
 `;
 
