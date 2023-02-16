@@ -26,7 +26,7 @@ function Home() {
       },
       caption: "오늘의 두 번째 책 입니다.",
       commentNumber: 0,
-      isLiked: true,
+      isLiked: false,
     },
     {
       id: 3,
