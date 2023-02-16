@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FatText } from "./shared";
 import Avatar from "./Avatar";
+import Comments from "./feeds/Comments";
 
 const PhotoContainer = styled.div`
   background-color: white;
@@ -62,9 +63,6 @@ const Likes = styled(FatText)`
   display: block;
 `;
 
-const Comments = styled.div`
-  margin-top: 20px;
-`;
 const Comment = styled.div``;
 const CommentCaption = styled.span`
   margin-left: 10px;
@@ -85,8 +83,8 @@ function Photo({
   isLiked,
   likes,
   caption,
-  commentNumber,
   comments,
+  commentNumber,
 }) {
   return (
     <PhotoContainer key={id}>
@@ -116,15 +114,14 @@ function Photo({
           </div>
         </PhotoActions>
         <Likes>{likes === 1 ? "1 like" : `${likes} likes`}</Likes>
-        <Comments>
-          <Comment>
-            <FatText>{user.username}</FatText>
-            <CommentCaption>{caption}</CommentCaption>
-          </Comment>
-          <CommentCount>
-            {commentNumber === 1 ? "1 comment" : `${commentNumber} comments`}
-          </CommentCount>
-        </Comments>
+
+        <Comments
+          photoId={id}
+          author={user.username}
+          caption={caption}
+          commentNumber={commentNumber}
+          comments={comments}
+        />
       </PhotoData>
     </PhotoContainer>
   );
@@ -137,10 +134,10 @@ Photo.propTypes = {
     username: PropTypes.string.isRequired,
   }),
   file: PropTypes.string.isRequired,
-  isLiked: PropTypes.bool.isRequired,
   likes: PropTypes.number.isRequired,
   caption: PropTypes.string,
   commentNumber: PropTypes.number.isRequired,
+  isLiked: PropTypes.bool.isRequired,
   comments: PropTypes.arrayOf(PropTypes.shape({})), // arrayType, shape() -> 객체검증
 };
 export default Photo;

@@ -13,6 +13,7 @@ function Home() {
       },
       caption: "오늘의 첫 번째 책 입니다.",
       commentNumber: 3,
+      isLiked: true,
     },
     {
       id: 2,
@@ -25,6 +26,7 @@ function Home() {
       },
       caption: "오늘의 두 번째 책 입니다.",
       commentNumber: 0,
+      isLiked: true,
     },
     {
       id: 3,
@@ -36,7 +38,37 @@ function Home() {
           "https://upload.wikimedia.org/wikipedia/commons/0/08/Won_Bin_LG.jpg",
       },
       caption: "오늘의 세 번째 책 입니다.",
-      commentNumber: 5,
+      commentNumber: 1,
+      comments: [
+        {
+          id: 1,
+          payload: "재밌어보입니다",
+          user: {
+            username: "inseop",
+            avatar:
+              "https://upload.wikimedia.org/wikipedia/commons/0/08/Won_Bin_LG.jpg",
+          },
+        },
+        {
+          id: 2,
+          payload: "재밌어보입니다2",
+          user: {
+            username: "inseop",
+            avatar:
+              "https://upload.wikimedia.org/wikipedia/commons/0/08/Won_Bin_LG.jpg",
+          },
+        },
+        {
+          id: 3,
+          payload: "재밌어보입니다3",
+          user: {
+            username: "inseop",
+            avatar:
+              "https://upload.wikimedia.org/wikipedia/commons/0/08/Won_Bin_LG.jpg",
+          },
+        },
+      ],
+      isLiked: true,
     },
   ];
   return (
