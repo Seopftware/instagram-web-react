@@ -9,8 +9,6 @@ const Content = styled.div`
 `;
 
 function Layout({ children }) {
-  console.log(children);
-
   return (
     <>
       <Header />
