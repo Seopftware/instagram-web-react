@@ -1,6 +1,5 @@
 import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import styled from "styled-components";
 
 const Header = styled.div`
