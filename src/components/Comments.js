@@ -19,20 +19,22 @@ const CommentAuthor = styled.span`
 `;
 const CommentContent = styled.span``;
 
-function Comments() {
+function Comments({ author, caption, comments, commentNumber }) {
   return (
     <CommentsContainer>
       <CommentContainer>
-        <CommentAuthor>작성자</CommentAuthor>
-        <CommentContent>올해는 검은 토끼의 해 입니당~~!! :) </CommentContent>
+        <CommentAuthor>{author}</CommentAuthor>
+        <CommentContent>{caption}</CommentContent>
       </CommentContainer>
 
-      <CommentCount>댓글 2개 모두 보기</CommentCount>
+      <CommentCount>댓글 {commentNumber}개 모두 보기</CommentCount>
 
-      <CommentContainer>
-        <CommentAuthor>댓글작성자1</CommentAuthor>
-        <CommentContent>댓글 1 </CommentContent>
-      </CommentContainer>
+      {comments?.map((comment) => (
+        <CommentContainer>
+          <CommentAuthor>{comment.user.username}</CommentAuthor>
+          <CommentContent>{comment.payload}</CommentContent>
+        </CommentContainer>
+      ))}
     </CommentsContainer>
   );
 }
