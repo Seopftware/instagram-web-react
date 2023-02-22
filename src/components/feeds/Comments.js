@@ -25,17 +25,19 @@ const onSubmit = (event) => {
 };
 
 function Comments({ author, caption, commentNumber, comments }) {
+  console.log("reviews", comments);
   return (
     <CommentsContainer>
-      <Comment author={author} payload={caption} />
+      <Comment owner={author} content={caption} />
       <CommentCount>
         {commentNumber === 1 ? "1 comment" : `${commentNumber} comments`}
       </CommentCount>
-      {comments?.map((comment) => (
+
+      {comments?.map((review) => (
         <Comment
-          key={comment.id}
-          author={comment.user.username}
-          payload={comment.payload}
+          key={review.id}
+          owner={review.owner.username}
+          content={review.content}
         />
       ))}
 
@@ -48,20 +50,20 @@ function Comments({ author, caption, commentNumber, comments }) {
   );
 }
 
-Comments.propTypes = {
-  author: PropTypes.string.isRequired,
-  caption: PropTypes.string,
-  commentNumber: PropTypes.number.isRequired,
-  comments: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      user: PropTypes.shape({
-        avatar: PropTypes.string,
-        username: PropTypes.string.isRequired,
-      }),
-      payload: PropTypes.string.isRequired,
-    })
-  ),
-};
+// Comments.propTypes = {
+//   author: PropTypes.string.isRequired,
+//   caption: PropTypes.string,
+//   commentNumber: PropTypes.number.isRequired,
+//   comments: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       id: PropTypes.number.isRequired,
+//       user: PropTypes.shape({
+//         avatar: PropTypes.string,
+//         username: PropTypes.string.isRequired,
+//       }),
+//       payload: PropTypes.string.isRequired,
+//     })
+//   ),
+// };
 
 export default Comments;

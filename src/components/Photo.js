@@ -6,7 +6,6 @@ import {
   faHeart,
 } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
-
 import { faHeart as SolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
@@ -80,25 +79,26 @@ const CommentCount = styled.span`
 
 function Photo({
   id,
-  user,
-  file,
+  owner,
+  img,
   isLiked,
   likes,
-  caption,
-  comments,
+  content,
+  reviews,
   commentNumber,
 }) {
+  console.log("reviews1", reviews);
   return (
     <PhotoContainer key={id}>
       <PhotoHeader>
-        <Link to={`/users/${user.username}`}>
-          <Avatar lg url={user.avatar} />
+        <Link to={`/users/${owner.username}`}>
+          <Avatar lg url={owner.avatar} />
         </Link>
-        <Link to={`/users/${user.username}`}>
-          <Username>{user.username}</Username>
+        <Link to={`/users/${owner.username}`}>
+          <Username>{owner.username}</Username>
         </Link>
       </PhotoHeader>
-      <PhotoFile src={file} />
+      <PhotoFile src={img} />
       <PhotoData>
         <PhotoActions>
           <div>
@@ -123,27 +123,27 @@ function Photo({
 
         <Comments
           photoId={id}
-          author={user.username}
-          caption={caption}
-          commentNumber={commentNumber}
-          comments={comments}
+          author={owner.username}
+          caption={content}
+          commentNumber={1}
+          comments={reviews}
         />
       </PhotoData>
     </PhotoContainer>
   );
 }
 
-Photo.propTypes = {
-  id: PropTypes.number.isRequired,
-  user: PropTypes.shape({
-    avatar: PropTypes.string,
-    username: PropTypes.string.isRequired,
-  }),
-  file: PropTypes.string.isRequired,
-  likes: PropTypes.number.isRequired,
-  caption: PropTypes.string,
-  commentNumber: PropTypes.number.isRequired,
-  isLiked: PropTypes.bool.isRequired,
-  comments: PropTypes.arrayOf(PropTypes.shape({})), // arrayType, shape() -> 객체검증
-};
+// Photo.propTypes = {
+//   id: PropTypes.number.isRequired,
+//   user: PropTypes.shape({
+//     avatar: PropTypes.string,
+//     username: PropTypes.string.isRequired,
+//   }),
+//   file: PropTypes.string.isRequired,
+//   likes: PropTypes.number.isRequired,
+//   caption: PropTypes.string,
+//   // commentNumber: PropTypes.number.isRequired,
+//   // isLiked: PropTypes.bool.isRequired,
+//   comments: PropTypes.arrayOf(PropTypes.shape({})), // arrayType, shape() -> 객체검증
+// };
 export default Photo;

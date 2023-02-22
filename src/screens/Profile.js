@@ -8,6 +8,7 @@ import { FatText } from "../components/shared";
 const Header = styled.div`
   display: flex;
 `;
+
 const Avatar = styled.img`
   margin-left: 50px;
   height: 160px;
@@ -164,6 +165,9 @@ function Profile() {
     }
   };
 
+  const { username } = useParams();
+  console.log("username", username);
+
   return (
     <>
       <Header>
@@ -185,6 +189,7 @@ function Profile() {
           <Row>{data?.user?.bio}</Row>
         </Column>
       </Header>
+
       <Grid>
         {data?.feeds?.map((feed) => (
           <Photo key={feed.id} bg={feed.file}>

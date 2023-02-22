@@ -1,11 +1,11 @@
-function useUser() {
-  const user = {
-    id: 1,
-    name: "inseop",
-    profileImg: "imgurl",
-  };
+// function useUser() {
+//   const user = {
+//     id: 1,
+//     name: "inseop",
+//     profileImg: "imgurl",
+//   };
 
-  return user;
-}
+//   return user;
+// }
 
-export default useUser;
+// export default useUser;

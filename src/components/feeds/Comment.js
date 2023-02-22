@@ -9,18 +9,18 @@ const CommentCaption = styled.span`
   margin-left: 10px;
 `;
 
-function Comment({ author, payload }) {
+function Comment({ owner, content }) {
   return (
     <CommentContainer>
-      <FatText>{author}</FatText>
-      <CommentCaption>{payload}</CommentCaption>
+      <FatText>{owner}</FatText>
+      <CommentCaption>{content}</CommentCaption>
     </CommentContainer>
   );
 }
 
-Comment.propTypes = {
-  author: PropTypes.string.isRequired,
-  payload: PropTypes.string.isRequired,
-};
+// Comment.propTypes = {
+//   author: PropTypes.string.isRequired,
+//   payload: PropTypes.string.isRequired,
+// };
 
 export default Comment;

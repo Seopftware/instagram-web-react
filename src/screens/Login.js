@@ -16,7 +16,9 @@ import Input from "../components/auth/Input";
 import Seperator from "../components/auth/Seperator";
 import routes from "../routes";
 import { isLoggedInVar } from "../apollo";
-
+import { useMutation } from "@tanstack/react-query";
+import { login } from "../api";
+import { useForm } from "react-hook-form";
 const FacebookLogin = styled.div`
   color: #385285;
   span {
@@ -25,12 +27,44 @@ const FacebookLogin = styled.div`
   }
 `;
 
-const onSubmit = (event) => {
-  event.preventDefault();
-  isLoggedInVar(true);
-};
-
 function Login() {
+  const [username, onChangeUsername] = useState("");
+  const [password, onChangePassword] = useState("");
+
+  const { register, handleSubmit } = useForm();
+
+  const mutation = useMutation(login, {
+    onSuccess: (data, variables, context) => {
+      console.log("mutation data", data);
+      // alert("로그인에 성공했습니다.");
+      // const { data } = useQuery(["userInfo"], getUserInfo);
+      // console.log("data", data);
+      isLoggedInVar(true);
+      console.log("success");
+      console.log("mutation3", mutation);
+    },
+    onError: () => {
+      console.log("error occurred");
+    },
+  });
+
+  const onChange = (event) => {
+    const { name, value } = event.currentTarget;
+
+    if (name === "username") {
+      onChangeUsername(value);
+    } else if (name === "password") {
+      onChangePassword(value);
+    }
+  };
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    console.log("mutation1", mutation);
+    mutation.mutate({ username, password });
+    console.log("mutation2", mutation);
+  };
+
   return (
     <AuthLayout>
       <FormBox>
@@ -38,10 +72,29 @@ function Login() {
           <FontAwesomeIcon icon={faInstagram} size="3x" />
         </div>
         <form onSubmit={onSubmit}>
-          <Input type="text" placeholder="Username" />
-          <Input type="password" placeholder="Password" />
-          <Button type="submit" value="Log in" />
+          <Input
+            name="username"
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={onChange}
+            required
+          />
+          <Input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={onChange}
+            required
+          />
+          <Button type="submit" value="Login" />
+          {mutation.error && (
+            <h5 onClick={() => mutation.reset()}>{mutation.error}</h5>
+          )}
+          {mutation.isError ? <div>Username or Password are wrong</div> : null}
         </form>
+
         <Seperator />
         <FacebookLogin>
           <FontAwesomeIcon icon={faFacebookSquare} />

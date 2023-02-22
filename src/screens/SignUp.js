@@ -5,9 +5,11 @@ import AuthLayout from "../components/auth/AuthLayout";
 import BottomBox from "../components/auth/BottomBox";
 import Button from "../components/auth/Button";
 import FormBox from "../components/auth/FormBox";
-import Input from "../components/auth/Input";
 import { FatLink } from "../components/shared";
 import routes from "../routes";
+import { useForm } from "react-hook-form"; // npm i react-hook-form --save
+import { useMutation } from "@tanstack/react-query";
+import { signup } from "../api";
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -21,7 +23,35 @@ const Subtitle = styled(FatLink)`
   margin-top: 10px;
 `;
 
-function SingUp() {
+const Input = styled.input`
+  width: 100%;
+  border-radius: 3px;
+  padding: 7px;
+  background-color: #fafafa;
+  border: 0.5px solid ${(props) => props.theme.borderColor};
+  margin-top: 5px;
+  box-sizing: border-box;
+  &::placeholder {
+    font-size: 12px;
+  }
+`;
+
+function SignUp() {
+  const { register, watch, handleSubmit } = useForm();
+
+  const mutation = useMutation(signup, {
+    onSuccess: () => {
+      console.log("success");
+    },
+    onError: () => {
+      console.log("error");
+    },
+  });
+
+  const onSubmit = ({ username, password, email }) => {
+    mutation.mutate({ username, password, email });
+  };
+
   return (
     <AuthLayout>
       <FormBox>
@@ -31,11 +61,23 @@ function SingUp() {
             Sign up to see photos and videos from your friends.
           </Subtitle>
         </HeaderContainer>
-        <form>
-          <Input type="text" placeholder="Name" />
-          <Input type="text" placeholder="Email" />
-          <Input type="text" placeholder="Username" />
-          <Input type="password" placeholder="Password" />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* <form> */}
+          <Input
+            type="text"
+            placeholder="Email"
+            {...register("email", { required: "Input your Email" })}
+          />
+          <Input
+            type="text"
+            placeholder="Username"
+            {...register("username", { required: "Input your Username" })}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            {...register("password")}
+          />
           <Button type="submit" value="Sign up" />
         </form>
       </FormBox>
@@ -43,4 +85,4 @@ function SingUp() {
     </AuthLayout>
   );
 }
-export default SingUp;
+export default SignUp;
