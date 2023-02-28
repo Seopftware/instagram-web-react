@@ -7,6 +7,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { isLoggedInVar } from "../apollo";
+import { useState } from "react";
+import { userNameLogin } from "../api";
+import { useMutation } from "@tanstack/react-query";
 
 const Container = styled.div`
   display: flex;
@@ -112,13 +115,40 @@ const FacebookLogin = styled.div`
   }
 `;
 
-const onSubmit = (event) => {
-  event.preventDefault();
-  console.log("login click");
-  isLoggedInVar(true);
-};
-
 function Login() {
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const mutation = useMutation(userNameLogin, {
+    onMutate: () => {
+      console.log("mutation start...");
+    },
+    onSuccess: () => {
+      console.log("API CALL SUCCESS");
+      isLoggedInVar(true);
+    },
+    onError: () => {
+      console.log("API CALL ERROR");
+    },
+  });
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    console.log("login click");
+    mutation.mutate({ username, password }); // mutation 호출 | API call할 때의 매개변수
+  };
+
+  const onChange = (event) => {
+    const { name, value } = event.currentTarget;
+    console.log(name, value);
+
+    if (name === "username") {
+      setUserName(value);
+    } else if (name === "password") {
+      setPassword(value);
+    }
+  };
+
   return (
     <Container>
       <Wrapper>
@@ -128,8 +158,22 @@ function Login() {
           </div>
 
           <form onSubmit={onSubmit}>
-            <Input type="email" placeholder="이메일" />
-            <Input type="password " placeholder="비밀번호" />
+            <Input
+              type="text"
+              name="username"
+              onChange={onChange}
+              value={username}
+              placeholder="유저네임"
+              required
+            />
+            <Input
+              type="password"
+              name="password"
+              onChange={onChange}
+              value={password}
+              placeholder="비밀번호"
+              required
+            />
             <Button type="submit" value="로그인" />
           </form>
 
