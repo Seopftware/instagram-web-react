@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { faPaperPlane, faUser } from "@fortawesome/free-regular-svg-icons";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { userLogout } from "api";
+import { isLoggedInVar } from "../apollo";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -32,9 +34,26 @@ const Column = styled.div``;
 const Icon = styled.span`
   margin-left: 5px;
 `;
-const Button = styled.span``;
+const Button = styled.button`
+  background-color: ${(props) => props.theme.accent};
+  border-radius: 4px;
+  padding: 4px 15px;
+  color: white;
+  font-weight: 600;
+`;
 
 function Header() {
+  const navigate = useNavigate();
+  const refreshPage = () => {
+    navigate(0);
+  };
+
+  const onLogout = async () => {
+    const res = await userLogout();
+    isLoggedInVar(false);
+    refreshPage();
+  };
+
   return (
     <HeaderContainer>
       <Wrapper>
@@ -57,6 +76,7 @@ function Header() {
                 <FontAwesomeIcon size="lg" icon={faUser} />
               </Link>
             </Icon>
+            <Button onClick={onLogout}>Logout</Button>
           </IconsContainer>
         </Column>
       </Wrapper>

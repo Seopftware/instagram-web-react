@@ -3,7 +3,7 @@ import Avatar from "components/Avartar";
 import { faHeart as SolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Comments from "../components/Comments";
-
+import { Link } from "react-router-dom";
 import {
   faBookmark,
   faComment,
@@ -68,21 +68,23 @@ const Likes = styled.span`
 
 function Feed({
   id,
-  file,
+  contentImg,
   caption,
   user,
-  likes,
-  commentNumber,
-  comments,
+  likesNum,
+  reviewsNum,
+  reviews,
   isLiked,
 }) {
   return (
     <FeedContainer key={id}>
       <FeedHeader>
         <Avatar lg url={user.profileImg} />
-        <Nickname>{user.username}</Nickname>
+        <Link to={`/profile/${user.username}`}>
+          <Nickname>{user.username}</Nickname>
+        </Link>
       </FeedHeader>
-      <FeedPhoto src={file} />
+      <FeedPhoto src={contentImg} />
 
       <FeedActionContainer>
         <FeedActions>
@@ -105,14 +107,14 @@ function Feed({
           </div>
         </FeedActions>
 
-        <Likes>{likes} likes</Likes>
+        <Likes>{likesNum} likes</Likes>
 
         <Comments
           key={id}
           author={user.username} // 작성자
           caption={caption} // 작성내용
-          comments={comments} // 댓글들 (댓글작성자, 댓글내용)
-          commentNumber={commentNumber} // 댓글 갯수
+          comments={reviews} // 댓글들 (댓글작성자, 댓글내용)
+          commentNumber={reviewsNum} // 댓글 갯수
         />
       </FeedActionContainer>
     </FeedContainer>

@@ -1,6 +1,9 @@
 import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
+import { getUserFeeds } from "api";
 
 const Header = styled.div`
   display: flex;
@@ -77,68 +80,54 @@ const Icon = styled.span`
 `;
 
 function Profile() {
+  // const data = useLocation();
+  // console.log("data", data);
+
+  const { username } = useParams();
+  console.log("username", username);
+
+  const { isLoading, data } = useQuery(["feeds", username], getUserFeeds);
+  console.log("data", data);
+
   return (
     <>
-      <Header>
-        <ProfileImg
-          src={
-            "https://mblogthumb-phinf.pstatic.net/MjAyMDA0MTBfMjQ4/MDAxNTg2NDgyNTMyMTQ1.dtZ7rR07L9U8giv9ea4juxflcnz18ZoF17_CnW6NHVsg.uPXYgoyZyQCrdSRsGNJYyMSQbhnK0Nh1BN4xUfOq_E4g.PNG.zencstory/0.png?type=w800"
-          }
-        />
-        <ProfileInfo>
-          <Row>
-            <Username>닉네임</Username>
-            <FollowBtn>팔로우버튼</FollowBtn>
-          </Row>
-          <Row>
-            <div>3</div>
-            <div>followers</div>
-            <div>10</div>
-            <div>following</div>
-          </Row>
-          <Row>
-            <div>소개글</div>
-          </Row>
-        </ProfileInfo>
-      </Header>
+      {isLoading ? (
+        ""
+      ) : (
+        <Header>
+          <ProfileImg src={data[0].user.profileImg} />
+          <ProfileInfo>
+            <Row>
+              <Username>{data[0].user.username}</Username>
+            </Row>
+            <Row>
+              <div>3</div>
+              <div>followers</div>
+              <div>10</div>
+              <div>following</div>
+            </Row>
+            <Row>
+              <div>{data[0].user.profileIntroduce}</div>
+            </Row>
+          </ProfileInfo>
+        </Header>
+      )}
 
       <Contents>
-        <Feed bg="http://image.yes24.com/goods/103308060/XL">
-          <Icons>
-            <Icon>
-              <FontAwesomeIcon icon={faHeart} />
-              123
-            </Icon>
-            <Icon>
-              <FontAwesomeIcon icon={faComment} />
-              100
-            </Icon>
-          </Icons>
-        </Feed>
-        <Feed bg="http://image.yes24.com/goods/103308060/XL">
-          <Icons>
-            <Icon>
-              <FontAwesomeIcon icon={faHeart} />
-              123
-            </Icon>
-            <Icon>
-              <FontAwesomeIcon icon={faComment} />
-              100
-            </Icon>
-          </Icons>
-        </Feed>
-        <Feed bg="http://image.yes24.com/goods/103308060/XL">
-          <Icons>
-            <Icon>
-              <FontAwesomeIcon icon={faHeart} />
-              123
-            </Icon>
-            <Icon>
-              <FontAwesomeIcon icon={faComment} />
-              100
-            </Icon>
-          </Icons>
-        </Feed>
+        {data?.map((feed) => (
+          <Feed key={feed.id} bg={feed.contentImg}>
+            <Icons>
+              <Icon>
+                <FontAwesomeIcon icon={faHeart} />
+                {feed.likesNum}
+              </Icon>
+              <Icon>
+                <FontAwesomeIcon icon={faComment} />
+                {feed.reviewsNum}
+              </Icon>
+            </Icons>
+          </Feed>
+        ))}
       </Contents>
     </>
   );
