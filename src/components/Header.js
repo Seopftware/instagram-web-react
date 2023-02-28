@@ -5,8 +5,11 @@ import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 import { isLoggedInVar } from "../apollo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import routes from "../routes";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getMyInfo } from "api";
+import { logout } from "../api";
 
 const SHeader = styled.header`
   width: 100%;
@@ -32,7 +35,7 @@ const Icon = styled.span`
   margin-left: 15px;
 `;
 
-const Button = styled.span`
+const Button = styled.button`
   background-color: ${(props) => props.theme.accent};
   border-radius: 4px;
   padding: 4px 15px;
@@ -46,7 +49,22 @@ const IconsContainer = styled.div`
 `;
 
 function Header() {
-  const isLoggedIn = true;
+  const queryClient = useQueryClient();
+  const { isLoading, data, isError } = useQuery(["myinfo"], getMyInfo, {
+    retry: false,
+  });
+
+  const navigate = useNavigate();
+  const refreshPage = () => {
+    navigate(0);
+  };
+
+  const onLogout = async () => {
+    const res = await logout();
+    isLoggedInVar(false);
+    refreshPage();
+    queryClient.refetchQueries(["myinfo"]);
+  };
 
   return (
     <SHeader>
@@ -57,9 +75,10 @@ function Header() {
           </Link>
         </Column>
         <Column>
-          {isLoggedIn ? (
+          {!isError ? (
             <>
               <IconsContainer>
+                <div>{data?.username + "님 환영합니다."}</div>
                 <Link to={`/`}>
                   <Icon>
                     <FontAwesomeIcon icon={faHome} size="lg" />
@@ -73,10 +92,11 @@ function Header() {
                     <FontAwesomeIcon icon={faUser} size="lg" />
                   </Icon>
                 </Link>
+                <Button onClick={onLogout}>Logout</Button>
               </IconsContainer>
             </>
           ) : (
-            <Link href={routes.home}>
+            <Link to={`/`}>
               <Button>Login</Button>
             </Link>
           )}

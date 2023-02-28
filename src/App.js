@@ -11,10 +11,24 @@ import { useReactiveVar } from "@apollo/client";
 import { darkModeVar, isLoggedInVar } from "./apollo";
 import { ThemeProvider } from "styled-components";
 import { darkTheme, GlobalStyles, lightTheme } from "./styles";
+import KakaoLogin from "./components/auth/KakaoLogin";
+import { useQuery } from "@tanstack/react-query";
+import { getMyInfo } from "api";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const darkMode = useReactiveVar(darkModeVar);
+
+  const { isLoading, data, isError } = useQuery(["myinfo"], getMyInfo, {
+    retry: false,
+  });
+
+  if (!isError) {
+    console.log("app.js - data", data);
+    if (data) {
+      isLoggedInVar(true);
+    }
+  }
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
@@ -45,6 +59,7 @@ function App() {
               </Layout>
             }
           />
+          <Route path={`/oauth/kakao`} element={<KakaoLogin />} />
         </Routes>
       </Router>
     </ThemeProvider>

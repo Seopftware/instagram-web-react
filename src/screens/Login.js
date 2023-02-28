@@ -3,8 +3,10 @@ import styled, { css } from "styled-components";
 import { darkModeVar } from "../apollo";
 import {
   faFacebookSquare,
+  faFacebookMessenger,
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
@@ -16,11 +18,13 @@ import Input from "../components/auth/Input";
 import Seperator from "../components/auth/Seperator";
 import routes from "../routes";
 import { isLoggedInVar } from "../apollo";
-import { useMutation } from "@tanstack/react-query";
-import { login } from "../api";
+import { Query, useMutation } from "@tanstack/react-query";
+import { getMyInfo, login } from "../api";
 import { useForm } from "react-hook-form";
-const FacebookLogin = styled.div`
-  color: #385285;
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+const KakaoLogin = styled.a`
+  color: yellow;
   span {
     margin-left: 10px;
     font-weight: 600;
@@ -30,18 +34,19 @@ const FacebookLogin = styled.div`
 function Login() {
   const [username, onChangeUsername] = useState("");
   const [password, onChangePassword] = useState("");
-
-  const { register, handleSubmit } = useForm();
+  const queryClient = useQueryClient();
 
   const mutation = useMutation(login, {
+    onMutate: () => {
+      console.log("mutation start");
+    },
     onSuccess: (data, variables, context) => {
-      console.log("mutation data", data);
-      // alert("로그인에 성공했습니다.");
-      // const { data } = useQuery(["userInfo"], getUserInfo);
-      // console.log("data", data);
-      isLoggedInVar(true);
       console.log("success");
-      console.log("mutation3", mutation);
+      console.log("mutation data", data);
+      alert("로그인에 성공했습니다.");
+      queryClient.refetchQueries(["myinfo"]);
+      isLoggedInVar(true);
+      window.location.reload();
     },
     onError: () => {
       console.log("error occurred");
@@ -60,10 +65,16 @@ function Login() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    console.log("mutation1", mutation);
     mutation.mutate({ username, password });
-    console.log("mutation2", mutation);
   };
+
+  const kakaoParams = {
+    client_id: "ac69abb9d6cab7a865c937ca01c2edb7", // rest api key
+    redirect_uri: "http://127.0.0.1:3000/oauth/kakao",
+    response_type: "code",
+  };
+
+  const params = new URLSearchParams(kakaoParams).toString();
 
   return (
     <AuthLayout>
@@ -89,17 +100,14 @@ function Login() {
             required
           />
           <Button type="submit" value="Login" />
-          {mutation.error && (
-            <h5 onClick={() => mutation.reset()}>{mutation.error}</h5>
-          )}
           {mutation.isError ? <div>Username or Password are wrong</div> : null}
         </form>
 
         <Seperator />
-        <FacebookLogin>
-          <FontAwesomeIcon icon={faFacebookSquare} />
-          <span>Log in with Facebook</span>
-        </FacebookLogin>
+        <KakaoLogin href={`https://kauth.kakao.com/oauth/authorize?${params}`}>
+          <FontAwesomeIcon icon={faFacebookMessenger} />
+          <span>Log in with Kakao</span>
+        </KakaoLogin>
       </FormBox>
       <BottomBox
         cta="Don't have an account?"
