@@ -45,7 +45,7 @@ const Button = styled.button`
 function Header() {
   const navigate = useNavigate();
   const refreshPage = () => {
-    navigate(0);
+    navigate(0); // 스크롤 맨 위로
   };
 
   const onLogout = async () => {

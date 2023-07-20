@@ -15,43 +15,46 @@ import { isLoggedInVar, darkModeVar } from "./apollo";
 import { lightTheme, darkTheme, GlobalStyles } from "./styles";
 
 import Layout from "./components/Layout";
+import { HelmetProvider } from "react-helmet-async";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const darkMode = useReactiveVar(darkModeVar);
 
   return (
-    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-      <GlobalStyles />
-      <Router>
-        <Routes>
-          <Route
-            path={routes.home}
-            element={
-              isLoggedIn ? (
+    <HelmetProvider>
+      <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+        <GlobalStyles />
+        <Router>
+          <Routes>
+            <Route
+              path={routes.home}
+              element={
+                isLoggedIn ? (
+                  <Layout>
+                    <Home />
+                  </Layout>
+                ) : (
+                  <Login />
+                )
+              }
+            />
+            <Route
+              path={routes.profile}
+              element={
                 <Layout>
-                  <Home />
+                  <Profile />
                 </Layout>
-              ) : (
-                <Login />
-              )
-            }
-          />
-          <Route
-            path={routes.profile}
-            element={
-              <Layout>
-                <Profile />
-              </Layout>
-            }
-          />
-          <Route
-            path={routes.signUp}
-            element={isLoggedIn ? null : <SignUp />}
-          />
-        </Routes>
-      </Router>
-    </ThemeProvider>
+              }
+            />
+            <Route
+              path={routes.signUp}
+              element={isLoggedIn ? null : <SignUp />}
+            />
+          </Routes>
+        </Router>
+      </ThemeProvider>
+    </HelmetProvider>
   );
 }
 
